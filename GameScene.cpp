@@ -3,6 +3,8 @@
 #include <cassert>
 #include <sstream>
 #include <iomanip>
+#include <sstream>
+#include <iomanip>
 
 using namespace DirectX;
 
@@ -20,6 +22,7 @@ GameScene::~GameScene()
 	delete modelGround;
 	delete modelFighter;
 	delete camera;
+	delete light;
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
@@ -73,16 +76,63 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	objSphere->SetModel(modelSphere);
 	objFighter->SetPosition({ +1,0,0 });
 	objSphere->SetPosition({ -1,0,0 });
+
+	//ライト生成
+	light = Light::Create();
+	//ライト色を設定
+	light->SetLightColor({ 1,1,1 });
+	//3Dオブジェクトにライトをセット
+	Object3d::SetLight(light);
 }
 
 void GameScene::Update()
 {
 	camera->Update();
 
+	//オブジェクトの回転
+	{
+		XMFLOAT3 rot = objSphere->GetRotation();
+		rot.y += 1.0f;
+		objSphere->SetRotation(rot);
+		objFighter->SetRotation(rot);
+	}
+
 	objSkydome->Update();
 	objGround->Update();
 	objFighter->Update();
 	objSphere->Update();
+
+	{
+		//光線方向初期値
+		static XMVECTOR lightDir = { 0,1,5,0 };
+
+		if (input->PushKey(DIK_W)) { lightDir.m128_f32[1] += 1.0f; }
+		else if (input->PushKey(DIK_S)) { lightDir.m128_f32[1] -= 1.0f; }
+		if (input->PushKey(DIK_D)) { lightDir.m128_f32[0] += 1.0f; }
+		else if (input->PushKey(DIK_A)) { lightDir.m128_f32[0] -= 1.0f; }
+
+		light->SetLightDir(lightDir);
+
+		std::ostringstream debugstr;
+		debugstr << "lightDirFactor("
+			<< std::fixed << std::setprecision(2)
+			<< lightDir.m128_f32[0] << ","
+			<< lightDir.m128_f32[1] << ","
+			<< lightDir.m128_f32[2] << ")";
+		debugText.Print(debugstr.str(), 50, 50, 1.0f);
+
+		debugstr.str("");
+		debugstr.clear();
+
+		const XMFLOAT3& cameraPos = camera->GetEye();
+		debugstr << "cameraPos("
+			<< std::fixed << std::setprecision(2)
+			<< cameraPos.x << ","
+			<< cameraPos.y << ","
+			<< cameraPos.z << ")";
+		debugText.Print(debugstr.str(), 50, 70, 1.0f);
+	}
+	light->Update();
 
 	debugText.Print("AD: move camera LeftRight", 50, 50, 1.0f);
 	debugText.Print("WS: move camera UpDown", 50, 70, 1.0f);
