@@ -33,14 +33,14 @@ void Light::Initialize()
 	cbResourceDesc.SampleDesc.Count = 1;
 	cbResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	//定数バッファの生成
-	ID3D12Resource* constBuffMaterial = nullptr;
+	//ID3D12Resource* constBuffMaterial = nullptr;
 	result = device->CreateCommittedResource(
 		&cbHeapProp,//ヒープ設定
 		D3D12_HEAP_FLAG_NONE,
 		&cbResourceDesc,//リソース設定
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&constBuffMaterial));
+		IID_PPV_ARGS(&constBuff));
 	assert(SUCCEEDED(result));
 
 	//定数バッファへのデータ転送
