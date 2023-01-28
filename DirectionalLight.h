@@ -6,7 +6,7 @@
 /// <summary>
 /// ライト
 /// </summary>
-class Light
+class DirectionalLight
 {
 private://エイリアス
 	//Microsoft::WRL::を省略
@@ -22,6 +22,7 @@ public://サブクラス
 	//定数バッファ用データ構造体
 	struct ConstBufferData
 	{
+		bool active = false;//有効フラグ
 		XMVECTOR lightv;	//ライトへの方向を表す
 		XMFLOAT3 lightcolor;//ライトの色
 	};
@@ -41,7 +42,7 @@ public:// 静的メンバ関数
 	/// インスタンス
 	/// </summary>
 	/// <returns>インスタンス</returns>
-	static Light* Create();
+	static DirectionalLight* Create();
 
 private://メンバ変数
 	//定数バッファ
@@ -52,6 +53,8 @@ private://メンバ変数
 	XMFLOAT3 lightcolor = { 1,1,1 };
 	//ダーティフラグ
 	bool dirty = false;
+	//有効フラグ
+	bool active = false;
 
 public://メンバ関数
 	/// <summary>
@@ -64,17 +67,10 @@ public://メンバ関数
 	/// </summary>
 	void TransferConstBuffer();
 
-	/// <summary>
-	/// ライト方向をセット
-	/// </summary>
-	/// <param name = "lightdir">ライト方向</param>
 	void SetLightDir(const XMVECTOR& lightdir);
-
-	/// <summary>
-	/// ライト方向をセット
-	/// </summary>
-	/// <param name = "lightdir">ライト方向</param>
+	XMVECTOR GetLightDir() { return lightdir; }
 	void SetLightColor(const XMFLOAT3& lightcolor);
+	XMFLOAT3 GetLightColor() { return lightcolor; }
 
 	/// <summary>
 	/// 更新
@@ -85,6 +81,17 @@ public://メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex);
+	
+	/// <summary>
+	/// 有効フラグをセット
+	/// </summary>
+	/// <param name = "lightdir">有効フラグ</param>
+	inline void SetActive(bool active) { this->active = active; }
 
+	/// <summary>
+	/// 有効チェック
+	/// </summary>
+	/// <returns>有効フラグ</returns>
+	inline bool isActive() { return active; }
 };
 

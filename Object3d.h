@@ -8,7 +8,8 @@
 #include <string>
 #include "Model.h"
 #include "Camera.h"
-#include "Light.h"
+#include "DirectionalLight.h"
+#include "LightGroup.h"
 
 /// <summary>
 /// 3Dオブジェクト
@@ -93,7 +94,7 @@ private: // 静的メンバ変数
 	// カメラ
 	static Camera* sCamera_;
 	//ライト
-	static Light* light;
+	static LightGroup* lightGroup;
 public: // メンバ関数
 	bool Initialize();
 	/// <summary>
@@ -105,6 +106,9 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	//ライトの描画
+	lightGroup->Draw(sCommandList, 3);
 
 	/// <summary>
 	/// 座標の取得
@@ -144,7 +148,7 @@ public: // メンバ関数
 	/// ライトのセット
 	/// </summary>
 	/// <param name="light">座標</param>
-	static void SetLight(Light* light) { Object3d::light = light; }
+	static void SetLightGroup(LightGroup* lightGroup) { Object3d::lightGroup = lightGroup; }
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
