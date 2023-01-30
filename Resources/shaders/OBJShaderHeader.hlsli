@@ -21,6 +21,8 @@ struct DirLight
 	uint active;
 };
 
+static const uint DIRLIGHT_NUM = 3;
+
 cbuffer cbuff2 : register(b2)
 {
 	float3 ambientColor;

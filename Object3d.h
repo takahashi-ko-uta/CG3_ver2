@@ -107,9 +107,6 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-	//ライトの描画
-	lightGroup->Draw(sCommandList, 3);
-
 	/// <summary>
 	/// 座標の取得
 	/// </summary>

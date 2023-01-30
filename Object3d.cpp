@@ -294,7 +294,11 @@ void Object3d::Draw() {
 	// 定数バッファビューをセット
 	sCommandList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
 	//ライトの描画
-	light->Draw(sCommandList,3);
+	//light->Draw(sCommandList,3);
+
+
+	//ライトの描画
+	lightGroup->Draw(sCommandList, 3);
 	// モデル描画
 	model->Draw(sCommandList);
 }

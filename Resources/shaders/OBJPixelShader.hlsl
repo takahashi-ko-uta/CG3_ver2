@@ -12,6 +12,8 @@ float4 main(VSOutput input) : SV_TARGET
 	//頂点から視点への方向ベクトル
 	float3 eyedir = normalize(cameraPos - input.worldpos.xyz);
 
+	float3 ambient = m_ambient;
+
 	//シェーディングによる色
 	float4 sheadecolor = float4(ambientColor * ambient, m_alpha);
 	
